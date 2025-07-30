@@ -1,4 +1,5 @@
 import type { PlayerEntity } from "../domain";
+import { error, success } from "@/shared/lib/either";
 import { gameRepository } from "../repositories/game";
 import cuid from "cuid";
 
@@ -13,16 +14,14 @@ export const createGame = async (player: PlayerEntity) => {
 	);
 
 	if (hasPlayerIdleGame) {
-		return {
-			type: "error",
-			error: "CAN_CREATE_ONLY_ONE_GAME",
-			message: "Player already have an idle game.",
-		};
+		return error("PLAYER_HAS_IDLE_GAME" as const);
 	}
 
-	return await gameRepository.createGame({
+	const createdGame = await gameRepository.createGame({
 		id: cuid(),
 		creator: player,
 		status: "gameIdle",
 	});
+
+	return success(createdGame);
 };

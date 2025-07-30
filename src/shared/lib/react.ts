@@ -22,7 +22,6 @@ export function useActionState<State, InitialState, Payload>(
 export function useActionState(
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	action: any,
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	initialState: any,
 	permalink?: string
 ) {
