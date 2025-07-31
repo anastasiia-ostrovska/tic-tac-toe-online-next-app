@@ -15,7 +15,6 @@ export const CreateGameButton = () => {
 	return (
 		<div className="flex flex-col gap-1">
 			<Button
-				className="cursor-pointer"
 				disabled={isPending}
 				onClick={() => startTransition(dispatch)}
 				error={mapError(data, (error) => {
