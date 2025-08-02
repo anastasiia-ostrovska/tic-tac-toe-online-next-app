@@ -11,11 +11,16 @@ export type UserEntity = {
 export type SessionEntity = {
 	id: UserId;
 	login: string;
+	expiresAt: string;
 };
 
 export const DEFAULT_USER_RATING = 1000;
 
-export const userToSession = (user: UserEntity): SessionEntity => ({
+export const userToSession = (
+	user: UserEntity,
+	expiresAt: string
+): SessionEntity => ({
 	id: user.id,
 	login: user.login,
+	expiresAt,
 });
