@@ -1,13 +1,9 @@
 import "server-only";
 import { SignJWT, jwtVerify } from "jose";
-import {
-	SessionEntity,
-	UserEntity,
-	userToSession,
-} from "@/entities/user/domain";
-import { success, error } from "@/shared/lib/either";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { success, error } from "@/shared/lib/either";
+import { SessionEntity, UserEntity, userToSession } from "../domain";
 
 export const sessionService = { createSession, deleteSession, verifySession };
 

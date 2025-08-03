@@ -12,7 +12,7 @@ export function AuthFormFields() {
 				<Label htmlFor="email">Email</Label>
 				<Input
 					id={loginId}
-					type="email"
+					type="text"
 					name="login"
 					placeholder="Enter your email"
 					required
