@@ -1,7 +1,8 @@
 "use client";
 
-import { FormEvent } from "react";
+import { useActionState } from "@/shared/lib/react";
 import { success } from "@/shared/lib/either";
+import { signUpAction } from "../actions/sign-up";
 import { AuthFormLayout } from "../ui/auth-form-layout";
 import { AuthFormFields } from "../ui/fields";
 import { SubmitButton } from "../ui/submit-button";
@@ -9,18 +10,17 @@ import { AuthFormBottomLink } from "../ui/link";
 import { ErrorMessage } from "../ui/error-message";
 
 export function SignUpForm() {
-	const handleSubmit = (e: FormEvent) => {
-		e.preventDefault();
-		// Handle login logic here
-		console.log("Login form submitted");
-	};
+	const [formState, action, isPending] = useActionState(
+		signUpAction,
+		success(undefined)
+	);
 
 	return (
 		<AuthFormLayout
 			title="Sign up"
 			description="Create an account to play with your friends and have fun!"
 			fields={<AuthFormFields />}
-			actions={<SubmitButton>Sign up</SubmitButton>}
+			actions={<SubmitButton isDisabled={isPending}>Sign up</SubmitButton>}
 			link={
 				<AuthFormBottomLink
 					text="Already have an account? "
@@ -28,8 +28,8 @@ export function SignUpForm() {
 					url="/sign-in"
 				/>
 			}
-			error={<ErrorMessage error={success(null)} />}
-			onSubmit={handleSubmit}
+			error={<ErrorMessage error={formState} />}
+			action={action}
 		/>
 	);
 }
