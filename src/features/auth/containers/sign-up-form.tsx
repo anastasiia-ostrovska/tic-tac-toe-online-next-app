@@ -2,12 +2,12 @@
 
 import { useActionState } from "@/shared/lib/react";
 import { success } from "@/shared/lib/either";
+import { signUpAction } from "../actions/sign-up";
 import { AuthFormLayout } from "../ui/auth-form-layout";
 import { AuthFormFields } from "../ui/fields";
 import { SubmitButton } from "../ui/submit-button";
 import { AuthFormBottomLink } from "../ui/link";
 import { ErrorMessage } from "../ui/error-message";
-import { signUpAction } from "../actions/sign-up";
 
 export function SignUpForm() {
 	const [formState, action, isPending] = useActionState(

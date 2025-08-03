@@ -27,5 +27,6 @@ async function comparePasswords({
 	password: string;
 	salt: string;
 }) {
-	return hash === (await hashPassword(password, salt)).hash;
+	const hashedPassword = await hashPassword(password, salt);
+	return hash === hashedPassword.hash;
 }

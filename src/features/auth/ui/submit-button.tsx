@@ -3,12 +3,13 @@ import { Button } from "@/shared/ui/button";
 
 interface SubmitButtonProps {
 	children: ReactNode;
+	isDisabled: boolean;
 }
 
-export function SubmitButton({ children }: SubmitButtonProps) {
+export function SubmitButton({ children, isDisabled }: SubmitButtonProps) {
 	return (
-		<Button type="submit" className="w-full">
-			{children}{" "}
+		<Button type="submit" disabled={isDisabled} className="w-full">
+			{children}
 		</Button>
 	);
 }
