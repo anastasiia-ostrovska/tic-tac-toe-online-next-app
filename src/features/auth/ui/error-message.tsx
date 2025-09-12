@@ -1,19 +1,15 @@
 import { AlertCircleIcon } from "lucide-react";
 import { Alert, AlertDescription } from "@/shared/ui/alert";
-import { Either, matchEither } from "@/shared/lib/either";
 
-interface ErrorMessageProps {
-	error: Either<string, unknown>;
-}
-
-export function ErrorMessage({ error }: ErrorMessageProps) {
-	return matchEither(error, {
-		error: (error) => (
+export function ErrorMessage({ error = "" }: { error?: string }) {
+	if (error) {
+		return (
 			<Alert variant="destructive">
 				<AlertCircleIcon />
 				<AlertDescription>{error}</AlertDescription>
 			</Alert>
-		),
-		success: () => null,
-	});
+		);
+	}
+
+	return null;
 }

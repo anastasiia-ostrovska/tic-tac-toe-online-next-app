@@ -2,25 +2,42 @@
 
 import { z } from "zod";
 import { redirect } from "next/navigation";
-import { error, mapError } from "@/shared/lib/either";
 import { createUser, sessionService } from "@/entities/user/server";
 
+export type SignUpFormState = {
+	formData?: FormData;
+	errors?: {
+		login?: string;
+		password?: string;
+		_errors?: string;
+	};
+};
+
 const formDataShema = z.object({
-	login: z.string().min(1, { message: "Login is required" }),
+	login: z.string().min(1),
 	password: z
 		.string()
-		.min(1, { message: "Password is required" })
 		.min(6, { message: "Password must be at least 6 characters long" }),
 });
 
-export const signUpAction = async (state: unknown, formData: FormData) => {
+export const signUpAction = async (
+	state: unknown,
+	formData: FormData
+): Promise<SignUpFormState> => {
 	const data = Object.fromEntries(formData.entries());
 	const result = formDataShema.safeParse(data);
 
 	if (!result.success) {
-		const treeifiedErrors = z.treeifyError(result.error);
+		const formattedErrors = result.error.format();
 
-		return error(`Validation error: ${treeifiedErrors.properties}`);
+		return {
+			formData,
+			errors: {
+				login: formattedErrors.login?._errors?.join(", "),
+				password: formattedErrors.password?._errors?.join(", "),
+				_errors: formattedErrors._errors?.join(", "),
+			},
+		};
 	}
 
 	const createdUser = await createUser(result.data);
@@ -30,9 +47,14 @@ export const signUpAction = async (state: unknown, formData: FormData) => {
 		redirect("/");
 	}
 
-	return mapError(createdUser, (error) => {
-		return {
-			["LOGIN_ALREADY_TAKEN"]: "User with this login already exists",
-		}[error];
-	});
+	const errorMessage = {
+		["LOGIN_ALREADY_TAKEN"]: "User with this login already exists",
+	}[createdUser.error];
+
+	return {
+		formData,
+		errors: {
+			_errors: errorMessage,
+		},
+	};
 };
